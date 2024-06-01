@@ -1,0 +1,5 @@
+Makefile
+output.txt
+tush
+tush.c
+tush.o
