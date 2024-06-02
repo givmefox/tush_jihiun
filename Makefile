@@ -21,7 +21,7 @@ $(TARGET): $(OBJS)
 	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
 # 소스 파일을 컴파일하여 오브젝트 파일 생성
-%.o: %.c
+%.o: %.c tush.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
 # clean 타겟: 생성된 파일들을 삭제
@@ -30,4 +30,3 @@ clean:
 
 # .PHONY를 사용하여 가상의 타겟임을 명시
 .PHONY: all clean
-
