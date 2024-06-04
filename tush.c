@@ -130,7 +130,6 @@ void handle_redirection(char **args) {
 void execute_external_command(char **args) {
     pid_t pid = fork(); // 자식 프로세스 생성
     if (pid == 0) { // 자식 프로세스 실행 코드
-        handle_redirection(args); // 리다이렉션 처리
         execvp(args[0], args); // 명령어 실행
         print_error(); // execvp가 실패하면 오류 메시지 출력
         exit(1); // 자식 프로세스 종료
@@ -338,6 +337,8 @@ int main() {
             free(args);
             continue;
         }
+
+        handle_redirection(args);   //리다이렉션 실행
 
         if (is_builtin_command(args[0])) { // 내장명령 검사, 내장명령이면
             execute_builtin_command(args); // 내장명령 실행
