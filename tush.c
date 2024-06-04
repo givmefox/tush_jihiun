@@ -9,7 +9,7 @@ typedef struct {
 } Job;
 
 
-const char error_message[30];    //에러메세지
+char error_message[30] = "An error has occurred\n";
 
 Job jobs[64];       //백그라운드 잡 넣을 배열
 int job_count;      //백그라운드 추적 수
@@ -82,7 +82,8 @@ void execute_builtin_command(char **args) {
 // 리다이렉션을 처리하는 함수
 void handle_redirection(char **args) {
     for (int i = 0; args[i] != NULL; i++) { // args 배열을 순회하면서
-        if (strcmp(args[i], ">") == 0 || strcmp(args[i], "2>") == 0 || strcmp(args[i], ">>") == 0 || strcmp(args[i], "<") == 0) { // 리다이렉션을 찾으면
+        if (strcmp(args[i], ">") == 0 || strcmp(args[i], "2>") == 0 ||
+         strcmp(args[i], ">>") == 0 || strcmp(args[i], "<") == 0) { // 리다이렉션을 찾으면
             int fd;
             if (args[i + 1] == NULL) { // 파일명이 없으면 오류
                 print_error();
@@ -131,9 +132,11 @@ void handle_redirection(char **args) {
 void execute_external_command(char **args) {
     pid_t pid = fork(); // 자식 프로세스 생성
     if (pid == 0) { // 자식 프로세스 실행 코드
-        execvp(args[0], args); // 명령어 실행
-        print_error(); // execvp가 실패하면 오류 메시지 출력
+        if (execvp(args[0], args) == -1) {  //명령어 실행
+        print_error();
         exit(1); // 자식 프로세스 종료
+    }
+        
     } else if (pid < 0) { // fork 실패 시
         print_error(); // 오류 메시지 출력
         exit(1); // 프로그램 종료
