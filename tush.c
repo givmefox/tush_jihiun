@@ -186,7 +186,6 @@ void execute_pipeline(char **args) {
         i++;
     }
 
-
     args[i] = NULL; // '|'를 NULL로 대체하여 명령어를 분리
     char **first_command = args; // 첫 번째 명령어
     char **second_command = &args[i + 1]; // 두 번째 명령어
