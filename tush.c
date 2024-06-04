@@ -364,7 +364,9 @@ int main() {
         }
 
 
-        freopen("/dev/tty", "w", stdout);
+        freopen("/dev/tty", "w", stdout);   //표준 출력 복구
+        freopen("/dev/tty", "r", stdin);    //표준 입력 복구
+        freopen("/dev/tty", "w", stderr);   //표준 에러 복구
 
         free(line); // 동적 할당된 메모리 해제
         free(args); // 동적 할당된 메모리 해제
