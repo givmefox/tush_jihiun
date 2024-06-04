@@ -102,6 +102,26 @@ void handle_redirection(char **args) {
             close(fd); // 파일 디스크립터 닫기
             args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
             break; // 루프 탈출
+        } else if (strcmp(args[i], ">>") == 0) { // 출력 추가 리다이렉션을 찾으면
+            int fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644); // 파일 생성 및 열기
+            if (fd < 0) { // 파일 열기에 실패하면
+                print_error(); // 오류 메시지 출력
+                exit(1); // 프로그램 종료
+            }
+            dup2(fd, STDOUT_FILENO); // 파일 디스크립터를 표준 출력으로 변경
+            close(fd); // 파일 디스크립터 닫기
+            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
+            break; // 루프 탈출
+        } else if (strcmp(args[i], "<") == 0) { // 입력 리다이렉션을 찾으면
+            int fd = open(args[i + 1], O_RDONLY); // 파일 열기
+            if (fd < 0) { // 파일 열기에 실패하면
+                print_error(); // 오류 메시지 출력
+                exit(1); // 프로그램 종료
+            }
+            dup2(fd, STDIN_FILENO); // 파일 디스크립터를 표준 입력으로 변경
+            close(fd); // 파일 디스크립터 닫기
+            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
+            break; // 루프 탈출
         }
     }
 }
@@ -152,7 +172,7 @@ void execute_parallel_commands(char **args) {
     if (args[0] != NULL) { // 남은 명령어가 있으면
         execute_external_command(args); // 외부 명령어 실행
     }
-}
+} 
 
 // 파이프라인 명령어를 실행하는 함수
 void execute_pipeline(char **args) {

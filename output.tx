@@ -1,0 +1,10 @@
+total 92
+-rw-r--r-- 1 root root   611 Jun  2 21:55 Makefile
+-rw-r--r-- 1 root root  2375 Jun  2 18:35 alias.c
+-rw-r--r-- 1 root root     0 Jun  4 00:18 output.tx
+-rw-r--r-- 1 root root    39 Jun  1 18:05 output.txt
+drwxr-xr-x 2 root root  4096 Jun  4 00:15 test
+-rwxr-xr-x 1 root root 29008 Jun  4 00:14 tush
+-rw-r--r-- 1 root root 14050 Jun  2 21:55 tush.c
+-rw-r--r-- 1 root root   707 Jun  2 22:21 tush.h
+-rw-r--r-- 1 root root 24392 Jun  4 00:14 tush.o
