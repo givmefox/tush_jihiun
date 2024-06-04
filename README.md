@@ -51,8 +51,8 @@ Ctrl+C를 누르면 셸은 다음 메시지를 표시합니다:
 프로그램은 명령어 실행 후 자원을 적절히 해제하고 표준 파일 디스크립터를 복원합니다.
 
 ### 참고 사항
-필수 시스템 호출(예: fork, execvp, pipe, dup2)이 환경에서 지원되는지 확인하세요.
-이 셸은 최소한의 구현이며 bash나 zsh와 같은 보다 견고한 셸의 일부 기능이 부족할 수 있습니다.
-라이선스
+https://github.com/remzi-arpacidusseau/ostep-projects/tree/master/processes-shell 에 있는 조건들을 참고했습니다.
 
-
+오류가 있을 수 있습니다.
+필수 시스템 호출(예: fork, execvp, pipe, dup2)이 환경에서 지원되는지 확인이 필요합니다.
+이 셸은 최소한의 구현이며 bash보다 기능이 부족합니다.
