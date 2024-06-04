@@ -321,7 +321,8 @@ void show_jobs() {
 }
 
 int main() {
-    signal(SIGINT, handle_sigint); // SIGINT 신호 핸들러 설정
+    signal(SIGINT, handle_sigint);      //종료 방지
+    signal(SIGQUIT,handle_sigint);
 
     while (1) { // 무한 루프
         printf("prompt> "); // 프롬프트 출력
