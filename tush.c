@@ -134,7 +134,6 @@ void execute_external_command(char **args) {
     if (pid == 0) { // 자식 프로세스 실행 코드
         if (execvp(args[0], args) == -1) {  //명령어 실행
         print_error();
-        exit(1); // 자식 프로세스 종료
     }
         
     } else if (pid < 0) { // fork 실패 시
@@ -187,10 +186,6 @@ void execute_pipeline(char **args) {
         i++;
     }
 
-    if (args[i] == NULL) { // '|'가 없으면 단일 명령어로 간주하고 실행
-        execute_external_command(args);
-        return;
-    }
 
     args[i] = NULL; // '|'를 NULL로 대체하여 명령어를 분리
     char **first_command = args; // 첫 번째 명령어
