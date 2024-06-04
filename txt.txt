@@ -1,0 +1,10 @@
+total 92
+-rw-r--r-- 1 root root   611 Jun  2 21:55 Makefile
+-rw-r--r-- 1 root root   581 Jun  4 22:52 output.txt
+-rw-r--r-- 1 root root   482 Jun  4 23:34 test.txt
+-rwxr-xr-x 1 root root 29256 Jun  4 23:38 tush
+-rw-r--r-- 1 root root 15107 Jun  4 23:38 tush.c
+-rw-r--r-- 1 root root   707 Jun  4 02:15 tush.h
+-rw-r--r-- 1 root root 25704 Jun  4 23:38 tush.o
+-rw-r--r-- 1 root root     0 Jun  4 23:39 txt.txt
+hello

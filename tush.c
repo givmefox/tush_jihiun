@@ -82,46 +82,47 @@ void execute_builtin_command(char **args) {
 // 리다이렉션을 처리하는 함수
 void handle_redirection(char **args) {
     for (int i = 0; args[i] != NULL; i++) { // args 배열을 순회하면서
-        if (strcmp(args[i], ">") == 0) { // 출력 리다이렉션을 찾으면
-            int fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644); // 파일 생성 및 열기
-            if (fd < 0) { // 파일 열기에 실패하면
-                print_error(); // 오류 메시지 출력
-                exit(1); // 프로그램 종료
+        if (strcmp(args[i], ">") == 0 || strcmp(args[i], "2>") == 0 || strcmp(args[i], ">>") == 0 || strcmp(args[i], "<") == 0) { // 리다이렉션을 찾으면
+            int fd;
+            if (args[i + 1] == NULL) { // 파일명이 없으면 오류
+                print_error();
+                return;
             }
-            dup2(fd, STDOUT_FILENO); // 파일 디스크립터를 표준 출력으로 변경
-            close(fd); // 파일 디스크립터 닫기
-            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
-            break; // 루프 탈출
-        } else if (strcmp(args[i], "2>") == 0) { // 표준 에러 리다이렉션을 찾으면
-            int fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644); // 파일 생성 및 열기
-            if (fd < 0) { // 파일 열기에 실패하면
-                print_error(); // 오류 메시지 출력
-                exit(1); // 프로그램 종료
+            if (strcmp(args[i], ">") == 0) {
+                fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644); // 파일 생성 및 열기
+                if (fd < 0) { // 파일 열기에 실패하면
+                    print_error(); // 오류 메시지 출력
+                    return;
+                }
+                dup2(fd, STDOUT_FILENO); // 파일 디스크립터를 표준 출력으로 변경
+            } else if (strcmp(args[i], "2>") == 0) {
+                fd = open(args[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644); // 파일 생성 및 열기
+                if (fd < 0) { // 파일 열기에 실패하면
+                    print_error(); // 오류 메시지 출력
+                    return;
+                }
+                dup2(fd, STDERR_FILENO); // 파일 디스크립터를 표준 에러로 변경
+            } else if (strcmp(args[i], ">>") == 0) {
+                fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644); // 파일 생성 및 열기
+                if (fd < 0) { // 파일 열기에 실패하면
+                    print_error(); // 오류 메시지 출력
+                    return;
+                }
+                dup2(fd, STDOUT_FILENO); // 파일 디스크립터를 표준 출력으로 변경
+            } else if (strcmp(args[i], "<") == 0) {
+                fd = open(args[i + 1], O_RDONLY); // 파일 열기
+                if (fd < 0) { // 파일 열기에 실패하면
+                    print_error(); // 오류 메시지 출력
+                    return;
+                }
+                dup2(fd, STDIN_FILENO); // 파일 디스크립터를 표준 입력으로 변경
             }
-            dup2(fd, STDERR_FILENO); // 파일 디스크립터를 표준 에러로 변경
             close(fd); // 파일 디스크립터 닫기
-            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
-            break; // 루프 탈출
-        } else if (strcmp(args[i], ">>") == 0) { // 출력 추가 리다이렉션을 찾으면
-            int fd = open(args[i + 1], O_WRONLY | O_CREAT | O_APPEND, 0644); // 파일 생성 및 열기
-            if (fd < 0) { // 파일 열기에 실패하면
-                print_error(); // 오류 메시지 출력
-                exit(1); // 프로그램 종료
+            // 리다이렉션 연산자와 파일명을 args 배열에서 제거
+            for (int j = i; args[j] != NULL; j++) {
+                args[j] = args[j + 2];
             }
-            dup2(fd, STDOUT_FILENO); // 파일 디스크립터를 표준 출력으로 변경
-            close(fd); // 파일 디스크립터 닫기
-            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
-            break; // 루프 탈출
-        } else if (strcmp(args[i], "<") == 0) { // 입력 리다이렉션을 찾으면
-            int fd = open(args[i + 1], O_RDONLY); // 파일 열기
-            if (fd < 0) { // 파일 열기에 실패하면
-                print_error(); // 오류 메시지 출력
-                exit(1); // 프로그램 종료
-            }
-            dup2(fd, STDIN_FILENO); // 파일 디스크립터를 표준 입력으로 변경
-            close(fd); // 파일 디스크립터 닫기
-            args[i] = NULL; // 리다이렉션 연산자를 NULL로 대체
-            break; // 루프 탈출
+            i--; // 인덱스 조정
         }
     }
 }
@@ -361,6 +362,9 @@ int main() {
                 execute_external_command(args); // 외부 명령어 실행
             }
         }
+
+
+        freopen("/dev/tty", "w", stdout);
 
         free(line); // 동적 할당된 메모리 해제
         free(args); // 동적 할당된 메모리 해제
